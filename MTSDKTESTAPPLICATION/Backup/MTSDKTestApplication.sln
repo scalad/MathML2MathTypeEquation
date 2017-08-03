@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTSDKTestApplication", "MTSDKTestApplication\MTSDKTestApplication.csproj", "{E0A505BC-718F-427A-9C46-1C80826D8228}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CCC50A71-DA40-4703-A638-3A045BD216ED} = {CCC50A71-DA40-4703-A638-3A045BD216ED}
