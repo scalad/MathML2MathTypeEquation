@@ -1,0 +1,9 @@
+C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\MTSDKDN\MTSDKDN\bin\Debug\MTSDKDN.dll
+C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\MTSDKDN\MTSDKDN\bin\Debug\MTSDKDN.pdb
+C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\MTSDKDN\MTSDKDN\obj\Debug\MTSDKDN.dll
+C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\MTSDKDN\MTSDKDN\obj\Debug\MTSDKDN.pdb
+C:\Users\Administrator\Desktop\DotNET\MTSDKDN\MTSDKDN\bin\Debug\MTSDKDN.dll
+C:\Users\Administrator\Desktop\DotNET\MTSDKDN\MTSDKDN\bin\Debug\MTSDKDN.pdb
+C:\Users\Administrator\Desktop\DotNET\MTSDKDN\MTSDKDN\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Administrator\Desktop\DotNET\MTSDKDN\MTSDKDN\obj\Debug\MTSDKDN.dll
+C:\Users\Administrator\Desktop\DotNET\MTSDKDN\MTSDKDN\obj\Debug\MTSDKDN.pdb

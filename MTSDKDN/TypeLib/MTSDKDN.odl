@@ -1,0 +1,410 @@
+[
+	uuid(0002CE85-0000-0000-C000-000000000046),
+	helpstring("Design Science Inc. SDK Utilities"),
+	lcid(0x0),
+	version(1.0)
+]
+library DesignScience_SDKUtilities
+{
+	importlib("stdole2.tlb");
+	importlib("stdole32.tlb");
+
+	typedef struct tagMTAPI_PICT
+	{
+		LONG	_mm;
+		LONG	_xExt;
+		LONG	_yExt;
+		LONG	_hMF;
+	} MTAPI_PICT;
+
+	typedef struct tagRECT
+	{
+		LONG	_left;
+		LONG	_top;
+		LONG	_right;
+		LONG	_bottom;
+	} RECT;
+
+	typedef struct tagMTAPI_DIMS
+	{
+		int	_baseline;
+		RECT	_bounds;
+	} MTAPI_DIMS;
+
+	typedef enum tagMathTypeReturnValue
+	{
+		mtOK 						= 0,
+		mtNOT_FOUND 			= -1,
+		mtCANT_RUN 				= -2,
+		mtBAD_VERSION 			= -3,
+		mtIN_USE 				= -4,
+		mtNOT_RUNNING 			= -5,
+		mtRUN_TIMEOUT 			= -6,
+		mtNOT_EQUATION 		= -7,
+		mtFILE_NOT_FOUND 		= -8,
+		mtMEMORY 				= -9,
+		mtBAD_FILE 				= -10,
+		mtDATA_NOT_FOUND 		= -11,
+		mtTOO_MANY_SESSIONS 	= -12,
+		mtSUBSTITUTION_ERROR	= -13,
+		mtTRANSLATOR_ERROR 	= -14,
+		mtPREFERENCE_ERROR 	= -15,
+		mtBAD_PATH 				= -16,
+		mtFILE_ACCESS 			= -17,
+		mtFILE_WRITE_ERROR 	= -18,
+		mtBAD_DATA 				= -19,
+		mtERROR 					= -9999
+	} MathTypeReturnValue;
+
+	typedef enum tagMTXFormSetTranslator
+	{
+		mtxfmTRANSL_INC_NONE					= 0,
+		mtxfmTRANSL_INC_NAME					= 1,
+		mtxfmTRANSL_INC_DATA					= 2,
+		mtxfmTRANSL_INC_MTDEFAULT			= 4,
+		mtxfmTRANSL_INC_CLIPBOARD_EXTRA	= 8
+	} MTXFormSetTranslator;
+
+	typedef enum tagMTTranslatorInfo
+	{
+		mttrnCOUNT		= 1,
+		mttrnMAX_NAME	= 2,
+		mttrnMAX_DESC	= 3,
+		mttrnMAX_FILE	= 4,
+		mttrnOPTIONS	= 5
+   } MTTranslatorInfo;
+
+	typedef enum tagMTXTranslatorPreference
+	{
+		mtxfmPREF_EXISTING	= 1,
+		mtxfmPREF_MTDEFAULT	= 2,
+		mtxfmPREF_USER			= 3,
+		mtxfmPREF_LAST			= 3
+	} MTXTranslatorPreference;
+
+	typedef enum tagMTXFormStatus
+	{
+		mtxfmSTAT_ACTUAL_LEN	= -1,
+		mtxfmSTAT_TRANSL		= -2,
+		mtxfmSTAT_PREF			= -3
+	} MTXFormStatus;
+
+	typedef enum tagMTXFormEqn
+	{
+		mtxfmPREVIOUS 	= -1,
+		mtxfmCLIPBOARD = -2,
+		mtxfmLOCAL 		= -3,
+		mtxfmFILE 		= -4,
+		mtxfmMTEF 		= 4,
+		mtxfmHMTEF 		= 5,
+		mtxfmPICT 		= 6,
+		mtxfmTEXT 		= 7,
+		mtxfmHTEXT 		= 8,
+		mtxfmGIF 		= 9,
+		mtxfmEPS_NONE	= 10,
+		mtxfmEPS_WMF 	= 11,
+		mtxfmEPS_TIFF 	= 12
+	} MTXFormEqn;
+
+	typedef enum tagMTPreferences
+	{
+		mtprfMODE_NEXT_EQN 	= 1,
+		mtprfMODE_MTDEFAULT 	= 2,
+		mtprfMODE_INLINE 		= 4
+	} MTPreferences;
+
+	typedef enum tagMTXFormSubValues
+	{
+		mtxfmSUBST_ALL 				= 0,
+		mtxfmSUBST_ONE 				= 1,
+		mtxfmVAR_SUB_BAD 				= -1,
+		mtxfmVAR_SUB_PLAIN_TEXT 	= 0,
+		mtxfmVAR_SUB_MTEF_TEXT 		= 1,
+		mtxfmVAR_SUB_MTEF_BINARY	= 2,
+		mtxfmVAR_SUB_DELETE 			= 3,
+		mtxfmVAR_SUB_MAX 				= 4,
+		mtxfmSTYLE_FIRST 				= 1,
+		mtxfmSTYLE_TEXT 				= 1,
+		mtxfmSTYLE_FUNCTION 			= 2,
+		mtxfmSTYLE_VARIABLE 			= 3,
+		mtxfmSTYLE_LCGREEK 			= 4,
+		mtxfmSTYLE_UCGREEK 			= 5,
+		mtxfmSTYLE_SYMBOL 			= 6,
+		mtxfmSTYLE_VECTOR 			= 7,
+		mtxfmSTYLE_NUMBER 			= 8,
+		mtxfmSTYLE_LAST 				= 8
+	} MTXFormSubValues;
+
+	typedef enum tagMTApiStartValues
+	{
+		mtinitLAUNCH_AS_NEEDED 	= 0,
+		mtinitLAUNCH_NOW 			= 1
+	} MTApiStartValues;
+
+	typedef enum tagMTClipboardEqnTypes
+	{
+		mtOLE_EQUATION 		= 1,
+		mtWMF_EQUATION 		= 2,
+		mtMAC_PICT_EQUATION	= 4,
+		mtOLE2_EQUATION 		= 8
+	} MTClipboardEqnTypes;
+
+	typedef enum tagMTURLTypes
+	{
+		mturlMATHTYPE_HOME 		= 1,
+		mturlMATHTYPE_SUPPORT 	= 2,
+		mturlMATHTYPE_FEEDBACK 	= 3,
+		mturlMATHTYPE_ORDER 		= 4,
+		mturlMATHTYPE_FUTURE 	= 5,
+		mturlMATHTYPE_REGISTER	= 6
+	} MTURLTypes;
+
+	typedef enum tagMTDimensionValues
+	{
+		mtdimFIRST 				= 1,
+		mtdimWIDTH 				= 1,
+		mtdimHEIGHT 			= 2,
+		mtdimBASELINE 			= 3,
+		mtdimHORIZ_POS_TYPE 	= 4,
+		mtdimHORIZ_POS 		= 5,
+		mtdimLast 				= 5
+	} MTDimensionValues;
+
+	[dllname("MT6.dll")]
+	module ClipboardFormats
+	{
+		const LPSTR cfNative = "Native";
+		const LPSTR cfOwnerLink = "OwnerLink";
+		const LPSTR cfRTF = "Rich Text Format";
+		const LPSTR cfMTEF = "MathType EF";
+		const LPSTR cfMacPICT = "Mac PICT";
+		const LPSTR cfEmbedSrc = "Embed Source";
+		const LPSTR cfObjDesc = "Object Descriptor";
+		const LPSTR cfEmbeddedObj = "Embedded Object";
+		const LPSTR cfMTMacro = "MathType Macro";
+		const LPSTR cfHTML = "HTML Format";
+		const LPSTR cfMTMacroPict = "MathType Macro PICT";
+		const LPSTR cfMMLPres = "MathML Presentation";
+		const LPSTR cfMML = "MathML";
+		const LPSTR cfMMLXML = "application/mathml+xml";
+		const LPSTR cfTeX = "TeX Input Language";
+	};
+
+	[dllname("MT6.dll")]
+	module MTSDKFunctions
+	{
+		[entry ("MTAPIConnect")]
+		int __stdcall MTAPIConnect([in] short mtStart, [in] short timeout);
+
+		[entry ("MTAPIVersion")]
+      int __stdcall MTAPIVersion([in] short apiversion);
+
+		[entry ("MTAPIDisconnect")]
+		int __stdcall MTAPIDisconnect();
+
+		[entry ("MTEquationOnClipboard")]
+		int __stdcall MTEquationOnClipboard();
+
+		[entry ("MTClearClipboard")]
+		int __stdcall MTClearClipboard();
+
+		[entry ("MTGetLastDimension")]
+		int __stdcall MTGetLastDimension([in] short dimIndex);
+
+		[entry ("MTOpenFileDialog")]
+		int __stdcall MTOpenFileDialog([in] short fileType, [in] BSTR title, [in] BSTR dir, [in] BSTR * file, [in] short fileLen);
+
+		[entry ("MTGetPrefsFromClipboard")]
+		int __stdcall MTGetPrefsFromClipboard([in, out] BSTR * prefs, [in] short prefsLen);
+
+		[entry ("MTGetPrefsFromFile")]
+		int __stdcall MTGetPrefsFromFile([in] BSTR prefFile, [in, out] BSTR * prefs, [in] short prefsLen);
+
+		[entry ("MTConvertPrefsToUIForm")]
+		int __stdcall MTConvertPrefsToUIForm([in] BSTR inPrefs, [in, out] BSTR * outPrefs, [in] short outPrefsLen);
+
+		[entry ("MTGetPrefsMTDefault")]
+		int __stdcall MTGetPrefsMTDefault([in, out] BSTR * prefs, [in] short prefsLen);
+
+		[entry ("MTSetMTPrefs")]
+		int __stdcall MTSetMTPrefs([in] short mode, [in] BSTR prefs, [in] short timeout);
+
+		[entry ("MTGetTranslatorsInfo")]
+		int __stdcall MTGetTranslatorsInfo([in] short infoIndex);
+
+		[entry ("MTEnumTranslators")]
+		int __stdcall MTEnumTranslators([in] short index, [in, out] BSTR * transName, [in] short transNameLen, [in, out] BSTR * transDesc, [in] short transDescLen, [in, out] BSTR * transFile, [in] short transFileLen);
+
+		[entry ("MTXFormReset")]
+		int __stdcall MTXFormReset();
+
+		[entry ("MTXFormAddVarSub")]
+		int __stdcall MTXFormAddVarSub([in] short options, [in] short findType, [in] BSTR find, [in] int findLen, [in] short replaceType, [in] BSTR replace, [in] int replaceLen, [in] short replaceStyle);
+
+		[entry ("MTXFormSetTranslator")]
+		int __stdcall MTXFormSetTranslator([in] short options, [in] BSTR transName);
+
+		[entry ("MTXFormSetPrefs")]
+		int __stdcall MTXFormSetPrefs([in] short prefType, [in] BSTR prefStr);
+
+		[entry ("MTXFormEqn")]
+		int __stdcall MTXFormEqn([in] short src, [in] short srcFmt, [in] int * srcData, [in] int srcDataLen, [in] short dst, [in] short dstFmt, [in] int * dstData, [in] int dstDataLen, [in] BSTR dstPath, [in] MTAPI_DIMS * dims);
+
+		[entry ("MTXFormGetStatus")]
+		int __stdcall MTXFormGetStatus([in] short index);
+
+		[entry ("MTPreviewDialog")]
+		int __stdcall MTPreviewDialog([in] int * parent, [in] BSTR title, [in] BSTR prefs, [in] BSTR closeBtnText, [in] BSTR helpBtnText, [in] int helpID, [in] BSTR helpFile);
+
+		[entry ("MTShowAboutBox")]
+		int __stdcall MTShowAboutBox();
+
+		[entry ("MTGetURL")]
+		int __stdcall MTGetURL([in] short whichURL, [in] short bGoToURL, [in, out] BSTR * strURL, [in] int sizeURL);
+	}
+
+	typedef enum tagTYMED
+	{
+		TYMED_HGLOBAL	= 1,
+		TYMED_FILE		= 2,
+		TYMED_ISTREAM	= 4,
+		TYMED_ISTORAGE	= 8,
+		TYMED_GDI		= 16,
+		TYMED_MFPICT	= 32,
+		TYMED_ENHMF		= 64,
+		TYMED_NULL		= 0
+	} TYMED;
+
+	typedef enum tagDVASPECT
+	{
+		DVASPECT_CONTENT		= 1,
+		DVASPECT_THUMBNAIL	= 2,
+		DVASPECT_ICON			= 4,
+		DVASPECT_DOCPRINT		= 8
+	} DVASPECT;
+
+	typedef enum tagDATADIR
+	{
+		DATADIR_GET	= 1,
+		DATADIR_SET	= 2
+	} DATADIR;
+
+	typedef struct tagFORMATETC
+	{
+		short			cfFormat;
+		LONG			pDVTARGETDEVICE;
+		DVASPECT		dwAspect;
+		LONG			lindex;
+		TYMED			tymed;
+	} FORMATETC;
+
+	typedef struct tagSTGMEDIUM
+	{
+		TYMED	tymed;
+		LONG	Data;
+		LONG	pUnkForRelease;
+	} STGMEDIUM;
+
+	typedef struct tagSTATDATA
+	{
+		FORMATETC	formatetc;
+		LONG			advf;
+		LONG			pAdvSink;
+		LONG			dwConnection;
+	} STATDATA;
+
+	[
+		uuid(00000103-0000-0000-C000-000000000046),
+		odl
+	]
+	interface IEnumFORMATETC : IUnknown
+	{
+		LONG __stdcall				Next([in] LONG celt, [out] FORMATETC *rgelt);
+		HRESULT __stdcall			Skip([in] LONG celt);
+		HRESULT __stdcall			Reset(void);
+		IEnumFORMATETC * __stdcall	Clone(void);
+	};
+
+	[
+		uuid(0000010e-0000-0000-C000-000000000046),
+		odl
+	]
+	interface IDataObject : IUnknown
+	{
+		HRESULT __stdcall GetData([in] FORMATETC *pformatetcIn, [out] STGMEDIUM *pmedium);
+		HRESULT __stdcall GetDataHere([in] FORMATETC *pformatetc, [in, out] STGMEDIUM *pmedium);
+		HRESULT __stdcall QueryGetData([in] FORMATETC *pformatetc);
+		HRESULT __stdcall GetCanonicalFormatEtc([in] FORMATETC *pformatectIn, [out] FORMATETC *pformatetcOut);
+		HRESULT __stdcall SetData([in] FORMATETC *pformatetc, [in] STGMEDIUM *pmedium, [in] LONG fRelease);
+		IEnumFORMATETC * __stdcall EnumFormatEtc([in] DATADIR dwDirection);
+		HRESULT __stdcall DAdvise([in]FORMATETC *pformatetc, [in]LONG advf, [in] LONG pAdvSink, [out] LONG *pdwConnection);
+		HRESULT __stdcall DUnadvise([in] LONG dwConnection);
+		HRESULT __stdcall EnumDAdvise([out] LONG * pIEnumAdvise);
+	};
+
+	typedef enum tagGMEM_CONSTANTS
+	{
+		GMEM_FIXED 				= 0x0000,
+		GMEM_MOVEABLE 			= 0x0002,
+		GMEM_NOCOMPACT 		= 0x0010,
+		GMEM_NODISCARD 		= 0x0020,
+		GMEM_ZEROINIT 			= 0x0040,
+		GMEM_MODIFY 			= 0x0080,
+		GMEM_DISCARDABLE 		= 0x0100,
+		GMEM_NOT_BANKED 		= 0x1000,
+		GMEM_SHARE 				= 0x2000,
+		GMEM_DDESHARE 			= 0x2000,
+		GMEM_NOTIFY 			= 0x4000,
+		GMEM_LOWER 				= 0x1000,
+		GMEM_VALID_FLAGS 		= 0x7F72,
+		GMEM_INVALID_HANDLE 	= 0x8000,
+	} GMEM_CONSTANTS;
+
+	[dllname("ole32.dll")]
+	module OLEFunctions
+	{
+		[entry("ReleaseStgMedium")]
+		void ReleaseStgMedium([in] STGMEDIUM * pmedium);
+	};
+
+	[dllname("user32.dll")]
+	module User32Functions
+	{
+		[entry("GetForegroundWindow")]
+		LONG __stdcall GetForegroundWindow();
+
+		[entry("SetForegroundWindow")]
+		LONG __stdcall SetForegroundWindow([in] LONG  hwnd);
+
+		[entry("RegisterClipboardFormatW")]
+		LONG __stdcall RegisterClipboardFormat([in] BSTR lpString);
+	};
+
+	[dllname("kernel32.dll")]
+	module Kernel32Functions
+	{
+		[entry("GetTickCount")]
+		LONG __stdcall GetTickCount();
+
+		[entry("GlobalFree")]
+		LONG __stdcall GlobalFree([in] LONG hMem);
+
+		[entry("GlobalAlloc")]
+		LONG __stdcall GlobalAlloc([in] LONG wFlags, [in] LONG dwBytes);
+
+		[entry("GlobalLock")]
+		LONG __stdcall GlobalLock([in] LONG hMem);
+
+		[entry("GlobalSize")]
+		LONG __stdcall GlobalSize([in] LONG hMem);
+
+		[entry("GlobalUnlock")]
+		LONG __stdcall GlobalUnlock([in] LONG hMem);
+
+		[entry("RtlMoveMemory")]
+		HRESULT __stdcall CopyMemory([in] void* dest, [in] void*  src, [in] LONG cbCopy );
+
+		[entry("GetLocaleInfoA")]
+		LONG __stdcall GetLocaleInfo([in] LONG Locale, [in] LONG LCType, [out] BSTR * lpLCData, [in] LONG cchData );
+	};
+}
