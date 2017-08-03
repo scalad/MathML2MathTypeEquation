@@ -59,6 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common.cs" />
+    <Compile Include="MathTypeSDK.cs" />
     <Compile Include="Program.cs">
     </Compile>
   </ItemGroup>
