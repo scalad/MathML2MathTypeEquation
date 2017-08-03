@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="ConvertEquations">
+</Property><Property Name="解决方案文件" Value="C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\ConvertEquations.sln">
+</Property><Property Name="Date" Value="2017年7月30日">
+</Property><Property Name="Time" Value="10:42">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="ConvertEquations.sln" Description="文件已成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\ConvertEquations.sln">
+</Event><Event ErrorLevel="0" Project="ConvertEquations" Source="ConvertEquations\ConvertEquations.csproj" Description="项目文件已成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\ConvertEquations\ConvertEquations.csproj">
+</Event><Event ErrorLevel="0" Project="ConvertEquations" Source="ConvertEquations\Program.cs" Description="文件已成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\ConvertEquations\Program.cs">
+</Event><Event ErrorLevel="0" Project="ConvertEquations" Source="ConvertEquations\ClassDiagram1.cd" Description="文件已成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\ConvertEquations\ClassDiagram1.cd">
+</Event><Event ErrorLevel="1" Project="ConvertEquations" Source="ConvertEquations\ConvertEquations.csproj" Description="您的项目以 .NET Framework 2.0 或 3.0 为目标。如果您的项目使用的程序集需要更新的 .NET Framework，则项目生成将失败。通过单击项目菜单上的“属性”，然后在“.NET Framework”下拉框中选择一个新版本，可以更改 .NET Framework 的版本。(在 Visual Basic 中，可在单击“高级编辑器选项...”按钮时显示的“编译”选项卡上找到此下拉框。)">
+</Event><Event ErrorLevel="0" Project="ConvertEquations" Source="ConvertEquations\ConvertEquations.csproj" Description="项目已成功转换">
+</Event><Event ErrorLevel="3" Project="ConvertEquations" Source="ConvertEquations\ConvertEquations.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MTSDKDN.csproj" Description="警告: 正将项目文件备份到与原始解决方案相对路径不同的相对路径中。文件夹层次结构上的差异可能会导致在打开或生成备份的解决方案和项目时出现问题。">
+</Event><Event ErrorLevel="0" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MTSDKDN.csproj" Description="项目文件已成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\MTSDKDN\MTSDKDN.csproj">
+</Event><Event ErrorLevel="0" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MTSDKDN.csproj.user" Description="项目用户文件成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\MTSDKDN\MTSDKDN.csproj.user">
+</Event><Event ErrorLevel="0" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MathTypeSDK.cs" Description="文件已成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\MTSDKDN\MathTypeSDK.cs">
+</Event><Event ErrorLevel="0" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\Properties\AssemblyInfo.cs" Description="文件已成功备份为 C:\Users\Administrator\Desktop\mathTypeSDK\DotNET\ConvertEquations\Backup\MTSDKDN\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="1" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MTSDKDN.csproj" Description="您的项目以 .NET Framework 2.0 或 3.0 为目标。如果您的项目使用的程序集需要更新的 .NET Framework，则项目生成将失败。通过单击项目菜单上的“属性”，然后在“.NET Framework”下拉框中选择一个新版本，可以更改 .NET Framework 的版本。(在 Visual Basic 中，可在单击“高级编辑器选项...”按钮时显示的“编译”选项卡上找到此下拉框。)">
+</Event><Event ErrorLevel="0" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MTSDKDN.csproj" Description="项目已成功转换">
+</Event><Event ErrorLevel="3" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MTSDKDN.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="ConvertEquations.sln" Description="成功转换解决方案">
+</Event><Event ErrorLevel="3" Project="" Source="ConvertEquations.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="ConvertEquations" Source="ConvertEquations\ConvertEquations.csproj" Description="扫描完成: 项目文件不需要升级。">
+</Event><Event ErrorLevel="0" Project="MTSDKDN" Source="..\MTSDKDN\MTSDKDN\MTSDKDN.csproj" Description="扫描完成: 项目文件不需要升级。">
+</Event></UpgradeLog>
