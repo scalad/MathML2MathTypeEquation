@@ -16,20 +16,14 @@ namespace ConvertEquations
 	#region Program Class
 	class Program
 	{
-		public void MessagePause(string strMessage)
-		{
-			Console.WriteLine(strMessage);
-			//Console.ReadKey(true);
-		}
-
         //微软提供的可调用的API入口
         [DllImport("shell32.dll ")]
         public static extern int ShellExecute(IntPtr hwnd, String lpszOp, String lpszFile, String lpszParams, String lpszDir, int FsShowCmd); 
 
 		public void LocalToClipboard(Program p, ConvertEquation ce)
 		{
-            killAllProcess("winword.exe");
-            killAllProcess("mathtype.exe");
+            Utils.killAllProcess("winword.exe");
+            Utils.killAllProcess("mathtype.exe");
             object name = "e:\\yb3.doc";
             string path = Utils.GetInputFolder("MathML8.txt");
             string d = System.IO.File.ReadAllText(path);
@@ -69,12 +63,13 @@ namespace ConvertEquations
                     }
                     finally
                     {
-                        killAllProcess("mathtype.exe");
+                        Utils.killAllProcess("mathtype.exe");
                     }
                 }
                 else
                 {
                     Console.WriteLine(datas);
+                    
                     Regex regex = new Regex(Common.HTML_IMG, RegexOptions.IgnoreCase);
                     MatchCollection matches = regex.Matches(datas.ToString());
                     int i = 0;
@@ -86,6 +81,8 @@ namespace ConvertEquations
                         object LinkToFile = false;
                         object SaveWithDocument = true;
                         object Anchor = newdoc.Application.Selection.Range;
+
+                        //插入图片
                         newdoc.Application.ActiveDocument.InlineShapes.AddPicture(sUrlList[0], ref LinkToFile, ref SaveWithDocument, ref Anchor);
                     }
 
@@ -110,38 +107,10 @@ namespace ConvertEquations
             newdoc = null;
             newapp = null;
             ShellExecute(IntPtr.Zero, "open", name.ToString(), "", "", 3);
-            p.MessagePause("Inspect the clipboard, then press any key");
+            Console.WriteLine("Inspect the clipboard, then press any key");
 		}
 
-        // 杀掉所有winword.exe进程
-        protected void killAllProcess(string processName) 
-        {
-            System.Diagnostics.Process[] myPs;
-            myPs = System.Diagnostics.Process.GetProcesses();
-            foreach (System.Diagnostics.Process p in myPs)
-            {
-                if (p.Id != 0)
-                {
-                    string myS = "WINWORD.EXE" + p.ProcessName + "  ID:" + p.Id.ToString();
-                    try
-                    {
-                        if (p.Modules != null)
-                            if (p.Modules.Count > 0)
-                            {
-                                System.Diagnostics.ProcessModule pm = p.Modules[0];
-                                myS += "\n Modules[0].FileName:" + pm.FileName;
-                                myS += "\n Modules[0].ModuleName:" + pm.ModuleName;
-                                myS += "\n Modules[0].FileVersionInfo:\n" + pm.FileVersionInfo.ToString();
-                                if (pm.ModuleName.ToLower() == processName)
-                                    p.Kill();
-                            }
-                    }
-                    catch
-                    { }
-                }
-            }
-        }
-
+        
         [STAThread] 
 		static void Main(string[] args)
 		{
@@ -149,7 +118,7 @@ namespace ConvertEquations
 			ConvertEquation ce = new ConvertEquation();
 
 			p.LocalToClipboard(p, ce);
-        
+  
             Console.ReadLine();
 		}
 	}

@@ -18,11 +18,37 @@ namespace ConvertEquations
 
     }
 
+
     /// <summary>
     /// 系统工具
     /// </summary>
     class Utils
     {
+        // 杀掉processName进程
+        public static void killAllProcess(string processName)
+        {
+            System.Diagnostics.Process[] myPs;
+            myPs = System.Diagnostics.Process.GetProcesses();
+            foreach (System.Diagnostics.Process p in myPs)
+            {
+                if (p.Id != 0)
+                {
+                    try
+                    {
+                        if (p.Modules != null)
+                            if (p.Modules.Count > 0)
+                            {
+                                System.Diagnostics.ProcessModule pm = p.Modules[0];
+                                if (pm.ModuleName.ToLower() == processName)
+                                    p.Kill();
+                            }
+                    }
+                    catch
+                    { }
+                }
+            }
+        }
+
         //过滤掉HTML中标签
         public static string NoHTML(string Htmlstring)
         {

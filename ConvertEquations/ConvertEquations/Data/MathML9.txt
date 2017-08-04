@@ -1,0 +1,1 @@
+﻿<math xmlns="http://www.w3.org/1998/Math/MathML"><mn>3</mn><mo>.</mo><mover><mn>1</mn><mo>.</mo></mover><mover><mn>4</mn><mo>.</mo></mover><mo></mo><mo>○</mo><mn>3</mn><mo>.</mo><mn>1414</mn><mo>·</mo><mo>·</mo><mo>·</mo></math>
