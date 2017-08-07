@@ -23,16 +23,27 @@ namespace ConvertEquations
         // init
         public bool Init()
         {
-            if (!m_bDidInit)
+        reboot:
+            try
             {
-                Int32 result = MathTypeSDK.Instance.MTAPIConnectMgn(MTApiStartValues.mtinitLAUNCH_AS_NEEDED, 30);
-                if (result == MathTypeReturnValue.mtOK)
+                if (!m_bDidInit)
                 {
-                    m_bDidInit = true;
-                    return true;
+                    Console.WriteLine("<<<Init>>>");
+
+                    Int32 result = MathTypeSDK.Instance.MTAPIConnectMgn(MTApiStartValues.mtinitLAUNCH_AS_NEEDED, 30);
+                    if (result == MathTypeReturnValue.mtOK)
+                    {
+                        m_bDidInit = true;
+                        return true;
+                    }
                 }
-                else
-                    return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                m_bDidInit = false;
+                Utils.killAllProcess("mathtype.exe");
+                goto reboot;
             }
             return true;
         }
@@ -42,6 +53,7 @@ namespace ConvertEquations
         {
             if (m_bDidInit)
             {
+                Console.WriteLine("<<<DelInit>>>");
                 m_bDidInit = false;
                 MathTypeSDK.Instance.MTAPIDisconnectMgn();
             }
@@ -423,9 +435,7 @@ namespace ConvertEquations
             {
                 if (!m_sdk.Init())
                     return false;
-
-                if (MathTypeSDK.Instance.MTXFormResetMgn() == MathTypeReturnValue.mtOK &&
-                    SetTranslator())
+                if (MathTypeSDK.Instance.MTXFormResetMgn() == MathTypeReturnValue.mtOK && SetTranslator())
                 {
                     Int32 stat = 0;
                     Int32 iBufferLength = 5000;
@@ -444,7 +454,6 @@ namespace ConvertEquations
                         iBufferLength,
                         m_eo.strFileName,
                         ref dims);
-
                     // save equation
                     if (stat == MathTypeReturnValue.mtOK)
                     {
