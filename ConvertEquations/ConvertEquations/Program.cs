@@ -45,7 +45,8 @@ namespace ConvertEquations
                 Console.WriteLine("Can't access excel");
                 return;
             }
-            excel.Visible = false; excel.UserControl = true;
+            excel.Visible = false; 
+            excel.UserControl = true;
             // 以只读的形式打开EXCEL文件  
             workbook = excel.Application.Workbooks.Open(path, missing, true, missing, missing, missing,
              missing, missing, missing, true, missing, missing, missing, missing, missing);
@@ -80,10 +81,9 @@ namespace ConvertEquations
                     string d = range.Text.ToString();
                     string[] oneLevelData = d.Split(new string[] { "<math", "</math>" }, StringSplitOptions.None);
 
+                    List<string> imgs = new List<string>();
                     foreach (string datas in oneLevelData)
                     {
-                        Word.Paragraph paragraph = newdoc.Content.Paragraphs.Add(nothing);
-
                         if (datas.StartsWith(" xmlns="))
                         {
                             // MML in a text file to clipboard text
@@ -91,10 +91,7 @@ namespace ConvertEquations
                             count++;
                             try
                             {
-                                newdoc.Select();
-                                paragraph.Range.Paste();
-                                //移动焦点
-                                newapp.Selection.Move(ref nothing,ref nothing);
+                                newapp.Selection.Paste();
                             }
                             catch (Exception e)
                             {
@@ -114,25 +111,32 @@ namespace ConvertEquations
                             Console.WriteLine(datas);
                             Regex regex = new Regex(Common.HTML_IMG, RegexOptions.IgnoreCase);
                             MatchCollection matches = regex.Matches(datas.ToString());
-                            
                             foreach (Match match in matches)
                             {
-                                object SaveWithDocument = true;
-                                object Anchor = newdoc.Application.Selection.Range;
-                                //插入图片
-                                newdoc.Application.ActiveDocument.InlineShapes.AddPicture(match.Groups["imgUrl"].Value, ref nothing, ref SaveWithDocument, ref Anchor);
+                                imgs.Add(match.Groups["imgUrl"].Value);
                             }
 
-                            newapp.Selection.Font.Color = Word.WdColor.wdColorBlack;
+                            //去除HTML标签
                             string para = Utils.NoHTML(datas);
                             if (para != null && para != "")
                             {
-                                newapp.Selection.TypeText(para);
+                                newapp.Selection.Font.Color = Word.WdColor.wdColorBlack;
+                                //去除空格、插入文本
+                                newapp.Selection.TypeText(para.Trim());
                             }
                         }
                     }
-                    newapp.Selection.MoveDown(ref nothing, ref nothing);//移动焦点
+                    foreach (string s in imgs)
+                    {
+                        object SaveWithDocument = true;
+                        object Anchor = newdoc.Application.Selection.Range;
+                        newapp.Selection.TypeParagraph();
+                        //插入图片
+                        newdoc.Application.ActiveDocument.InlineShapes.AddPicture(s, ref nothing, ref SaveWithDocument, ref Anchor);
+                    }
+                    newapp.Selection.TypeParagraph();
                 }
+                newapp.Selection.TypeParagraph();
                 //清空粘贴板，否则会将前一次粘贴记录保留。
                 Clipboard.SetDataObject("", true);
             }
