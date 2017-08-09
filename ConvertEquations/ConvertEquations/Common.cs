@@ -15,7 +15,19 @@ namespace ConvertEquations
     {
         //过滤HTML中img标签中的src
         public static string HTML_IMG = @"<img\b[^<>]*?\bsrc[\s\t\r\n]*=[\s\t\r\n]*[""']?[\s\t\r\n]*(?<imgUrl>[^\s\t\r\n""'<>]*)[^<>]*?/?[\s\t\r\n]*>";
+    }
 
+    /// <summary>
+    /// 系统状态码
+    /// </summary>
+    sealed class ResultCode
+    {
+        public static string SUCCESS = "转换成功";
+        public static string WORD_ERROR = "Word错误";
+        public static string WORD_SAVE_ERROR = "Word存储错误";
+        public static string EXCEL_ERROR = "Excel错误";
+        public static string EXCEL_READ_ERROR = "Excel读取错误";
+        public static string FILE_PATH_ERROR = "文件位置错误";
     }
 
 
