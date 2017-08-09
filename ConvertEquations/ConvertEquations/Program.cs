@@ -37,7 +37,7 @@ namespace ConvertEquations
 
             Excel.Workbook workbook = null;
             Excel.Worksheet worksheet = null;
-            string path = Utils.GetInputFolder("高中数学(必修2)(人教版A)01一章 空间几何体 (3).xls");
+            string path = Utils.GetInputFolder("高中数学(必修2)(人教版A)01一章 空间几何体 (1).xls");
             object missing = System.Reflection.Missing.Value;
             Excel.Application excel = new Excel.Application();//lauch excel application  
             if (excel == null)
