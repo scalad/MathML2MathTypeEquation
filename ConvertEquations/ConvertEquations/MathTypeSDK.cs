@@ -18,12 +18,11 @@ namespace ConvertEquations
         public MTSDK() { }
 
         // vars
-        protected bool m_bDidInit = false;
+        protected static bool m_bDidInit = false;
 
         // init
         public bool Init()
         {
-        reboot:
             try
             {
                 if (!m_bDidInit)
@@ -40,8 +39,6 @@ namespace ConvertEquations
             {
                 Console.WriteLine(ex);
                 m_bDidInit = false;
-                Utils.killAllProcess("mathtype.exe");
-                goto reboot;
             }
             return true;
         }
@@ -248,18 +245,18 @@ namespace ConvertEquations
 
     abstract class EquationInputFile : EquationInput
     {
-        public EquationInputFile(string strFileName, string strInTrans)
+        public EquationInputFile(string text, string strInTrans)
             : base(strInTrans)
         {
-            this.strFileName = strFileName;
+            this.strFileName = text;
             iType = MTXFormEqn.mtxfmLOCAL;
         }
     }
 
     class EquationInputFileText : EquationInputFile
     {
-        public EquationInputFileText(string strFileName, string strInTrans)
-            : base(strFileName, strInTrans)
+        public EquationInputFileText(string text, string strInTrans)
+            : base(text, strInTrans)
         {
             iFormat = MTXFormEqn.mtxfmMTEF;
         }
