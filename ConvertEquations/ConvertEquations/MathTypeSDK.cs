@@ -28,8 +28,6 @@ namespace ConvertEquations
             {
                 if (!m_bDidInit)
                 {
-                    Console.WriteLine("<<<Init>>>");
-
                     Int32 result = MathTypeSDK.Instance.MTAPIConnectMgn(MTApiStartValues.mtinitLAUNCH_AS_NEEDED, 30);
                     if (result == MathTypeReturnValue.mtOK)
                     {
@@ -53,7 +51,6 @@ namespace ConvertEquations
         {
             if (m_bDidInit)
             {
-                Console.WriteLine("<<<DelInit>>>");
                 m_bDidInit = false;
                 MathTypeSDK.Instance.MTAPIDisconnectMgn();
             }
