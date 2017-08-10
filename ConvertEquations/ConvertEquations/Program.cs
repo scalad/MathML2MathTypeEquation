@@ -11,97 +11,9 @@ using IDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using System.Text.RegularExpressions;
 using System.Linq.Expressions;
 using System.Collections.Generic;
-using EnvDTE;
-using EnvDTE80;
 
 namespace ConvertEquations
 {
-    [ComImport(), Guid("00000016-0000-0000-C000-000000000046"),InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    interface IOleMessageFilter
-    {
-        [PreserveSig]
-        int HandleInComingCall(
-            int dwCallType,
-            IntPtr hTaskCaller,
-            int dwTickCount,
-            IntPtr lpInterfaceInfo);
-
-        [PreserveSig]
-        int RetryRejectedCall(
-            IntPtr hTaskCallee,
-            int dwTickCount,
-            int dwRejectType);
-
-        [PreserveSig]
-        int MessagePending(
-            IntPtr hTaskCallee,
-            int dwTickCount,
-            int dwPendingType);
-    }
-
-    public class MessageFilter : IOleMessageFilter
-    {
-        //
-        // Class containing the IOleMessageFilter
-        // thread error-handling functions.
-
-        // Start the filter.
-        public static void Register()
-        {
-            Console.WriteLine("Register method");
-            IOleMessageFilter newFilter = new MessageFilter();
-            IOleMessageFilter oldFilter = null;
-            CoRegisterMessageFilter(newFilter, out oldFilter);
-        }
-
-        // Done with the filter, close it.
-        public static void Revoke()
-        {
-            Console.WriteLine("revoke method...");
-            IOleMessageFilter oldFilter = null;
-            CoRegisterMessageFilter(null, out oldFilter);
-        }
-
-        //
-        // IOleMessageFilter functions.
-        // Handle incoming thread requests.
-        int IOleMessageFilter.HandleInComingCall(int dwCallType,
-          System.IntPtr hTaskCaller, int dwTickCount, System.IntPtr
-          lpInterfaceInfo)
-        {
-            Console.WriteLine("HandleInComingCall method");
-            return 0;
-        }
-
-        // Thread call was rejected, so try again.
-        int IOleMessageFilter.RetryRejectedCall(System.IntPtr
-          hTaskCallee, int dwTickCount, int dwRejectType)
-        {
-            if (dwRejectType == 2)
-            // flag = SERVERCALL_RETRYLATER.
-            {
-                // Retry the thread call immediately if return >=0 & 
-                // <100.
-                return 99;
-            }
-            // Too busy; cancel call.
-            return -1;
-        }
-
-        int IOleMessageFilter.MessagePending(System.IntPtr hTaskCallee,
-          int dwTickCount, int dwPendingType)
-        {
-            //Return the flag PENDINGMSG_WAITDEFPROCESS.
-            return 2;
-        }
-
-        // Implement the IOleMessageFilter interface.
-        [DllImport("Ole32.dll")]
-        private static extern int
-          CoRegisterMessageFilter(IOleMessageFilter newFilter, out 
-          IOleMessageFilter oldFilter);
-    }
-
     class Program
     {
         //用于作为函数的默认参数
@@ -126,7 +38,7 @@ namespace ConvertEquations
             Utils.killAllProcess("winword.exe");
             Utils.killAllProcess("mathtype.exe");
             Utils.killAllProcess("excel.exe");
-            object name = "c:\\yb3.docx";
+            object name = "e:\\yb3.docx";
 
             //create document
             Word.Application newapp = new Word.Application();
@@ -219,21 +131,18 @@ namespace ConvertEquations
                                         Console.WriteLine("插入图片完成");
                                     }
                                     newapp.Selection.Font.Color = Word.WdColor.wdColorBlack;
-                                    string text = Utils.NoHTML("<span><img " + tag + "</span>");
+                                    var newtag = tag;
+                                    if (tag != null && ( tag.StartsWith(" img_type") || tag.Contains("src")))
+                                    {
+                                         newtag = "<img " + tag;
+                                    }
+                                    string text = Utils.NoHTML(newtag);
                                     if (text != null && !"".Equals(text))
                                     {
                                         //去除空格、插入文本b
                                         newapp.Selection.TypeText(text.Trim());
                                         newapp.Selection.Move();
                                         Console.WriteLine("插入文本完成 >>> " + text);
-                                    }
-                                    else
-                                    {
-                                        int location = text.Trim().IndexOf("</");
-                                        Console.WriteLine(location);
-                                        newapp.Selection.TypeText(tag.Trim());
-                                        newapp.Selection.Move();
-                                        Console.WriteLine("插入文本完成 >>> " + tag);
                                     }
                                 }
                             }
