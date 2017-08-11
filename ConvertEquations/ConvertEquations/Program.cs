@@ -11,6 +11,7 @@ using IDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 using System.Text.RegularExpressions;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using System.Net;
 
 namespace ConvertEquations
 {
@@ -18,6 +19,8 @@ namespace ConvertEquations
     {
         //用于作为函数的默认参数
         public static object nothing = System.Reflection.Missing.Value;
+
+        public static WebClient webClient = new WebClient();
 
         //微软提供的可调用的API入口
         [DllImport("shell32.dll ")]
@@ -27,18 +30,19 @@ namespace ConvertEquations
         [STAThread]
         static void Main(string[] args)
         {
-            string ConString = System.Configuration.ConfigurationManager.AppSettings["filepath"];
-            string filename = System.Configuration.ConfigurationManager.AppSettings["filename"];
             Program program = new Program();
-            program.MathML2MathTypeWord(program, new ConvertEquation(), filename);
+            string filepath = System.Configuration.ConfigurationManager.AppSettings["filepath"];
+            string savepath = System.Configuration.ConfigurationManager.AppSettings["savepath"];
+            string filename = System.Configuration.ConfigurationManager.AppSettings["filename"];
+            program.MathML2MathTypeWord(program, new ConvertEquation(),savepath, filepath, filename);
         }
 
-        public string MathML2MathTypeWord(Program p, ConvertEquation ce, string filename)
+        public string MathML2MathTypeWord(Program p, ConvertEquation ce, string savepath, string filepath, string filename)
         {
             Utils.killAllProcess("winword.exe");
             Utils.killAllProcess("mathtype.exe");
             Utils.killAllProcess("excel.exe");
-            object name = "e:\\yb3.docx";
+            object name = savepath + filename.Substring(0, filename.LastIndexOf(".")) + ".doc";
 
             //create document
             Word.Application newapp = new Word.Application();
@@ -46,7 +50,6 @@ namespace ConvertEquations
             Word.Document newdoc = newapp.Documents.Add(ref nothing, ref nothing, ref nothing, ref nothing);
             //是否显示word程序界面
             newapp.Visible = false;
-          
 
             Excel.Workbook workbook = null;
             Excel.Worksheet worksheet = null;
@@ -60,6 +63,7 @@ namespace ConvertEquations
             }
             excel.Visible = false; 
             excel.UserControl = true;
+
             // 以只读的形式打开EXCEL文件  
             workbook = excel.Application.Workbooks.Open(path, nothing, true, nothing, nothing, nothing,
              nothing, nothing, nothing, true, nothing, nothing, nothing, nothing, nothing);
@@ -115,7 +119,7 @@ namespace ConvertEquations
                             }
                             else
                             {
-                                string[] tags = datas.Split(new string[] { "<img" }, StringSplitOptions.None);
+                                string[] tags = datas.Split(new string[] { "<img", "<IMG" }, StringSplitOptions.None);
                                 foreach(string tag in tags)
                                 {
                                     Console.WriteLine(tag);
@@ -125,8 +129,15 @@ namespace ConvertEquations
                                         object SaveWithDocument = true;
                                         anchor = newdoc.Application.Selection.Range;
                                         newapp.Selection.Move();
-                                        //插入图片
-                                        newdoc.Application.ActiveDocument.InlineShapes.AddPicture(matchString, ref nothing, ref SaveWithDocument, ref anchor);
+                                        if (matchString.Contains("teacher"))
+                                        {
+                                            webClient.DownloadFile(matchString, @"c:\\images\\test.png");
+                                            newdoc.Application.ActiveDocument.InlineShapes.AddPicture(@"c:\\images\\test.png", true, true, ref anchor);
+                                        }
+                                        else
+                                        {
+                                            newdoc.Application.ActiveDocument.InlineShapes.AddPicture(matchString, true, true, ref anchor);
+                                        }
                                         newapp.Selection.Move();
                                         Console.WriteLine("插入图片完成");
                                     }
@@ -161,13 +172,21 @@ namespace ConvertEquations
 
             try
             {
-                newdoc.SaveAs(ref name, ref nothing, ref nothing, ref nothing, ref nothing, ref nothing, ref nothing,
+                object fileFormat = Word.WdSaveFormat.wdFormatDocument;
+                newdoc.SaveAs(ref name, fileFormat, ref nothing, ref nothing, ref nothing, ref nothing, ref nothing,
                        ref nothing, ref nothing, ref nothing, ref nothing, ref nothing, ref nothing, ref nothing,
                        ref nothing, ref nothing);
             }
             catch (Exception ex)
             {
-                newdoc.Close(true, ref nothing, ref nothing);
+                try
+                {
+                    newdoc.Close(ref nothing, ref nothing, ref nothing);
+                }
+                catch (Exception tt)
+                {
+                    Console.WriteLine(tt);
+                }
                 Console.WriteLine(ex);
             }
             excel.Quit();
