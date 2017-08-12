@@ -31,13 +31,12 @@ namespace ConvertEquations
         static void Main(string[] args)
         {
             Program program = new Program();
-            string filepath = System.Configuration.ConfigurationManager.AppSettings["filepath"];
             string savepath = System.Configuration.ConfigurationManager.AppSettings["savepath"];
             string filename = System.Configuration.ConfigurationManager.AppSettings["filename"];
-            program.MathML2MathTypeWord(program, new ConvertEquation(),savepath, filepath, filename);
+            program.MathML2MathTypeWord(program, new ConvertEquation(),savepath, filename);
         }
 
-        public string MathML2MathTypeWord(Program p, ConvertEquation ce, string savepath, string filepath, string filename)
+        public string MathML2MathTypeWord(Program p, ConvertEquation ce, string savepath, string filename)
         {
             Utils.killAllProcess("winword.exe");
             Utils.killAllProcess("mathtype.exe");
@@ -128,16 +127,8 @@ namespace ConvertEquations
                                     {
                                         object SaveWithDocument = true;
                                         anchor = newdoc.Application.Selection.Range;
-                                        newapp.Selection.Move();
-                                        if (matchString.Contains("teacher"))
-                                        {
-                                            webClient.DownloadFile(matchString, @"c:\\images\\test.png");
-                                            newdoc.Application.ActiveDocument.InlineShapes.AddPicture(@"c:\\images\\test.png", true, true, ref anchor);
-                                        }
-                                        else
-                                        {
-                                            newdoc.Application.ActiveDocument.InlineShapes.AddPicture(matchString, true, true, ref anchor);
-                                        }
+                                        webClient.DownloadFile(matchString, @"c:\\images\\test.png");
+                                        newdoc.Application.ActiveDocument.InlineShapes.AddPicture(@"c:\\images\\test.png", true, true, ref anchor);
                                         newapp.Selection.Move();
                                         Console.WriteLine("插入图片完成");
                                     }
