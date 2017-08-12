@@ -1,5 +1,7 @@
 ## MathML2MathTypeEquation ##
 
+### 介绍 ###
+
 这篇文章主要介绍怎么使用[MathType](https://www.dessci.com/en/reference/sdk/)把[MathML](https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%A6%E7%BD%AE%E6%A0%87%E8%AF%AD%E8%A8%80)转换MathType类型的公式对象并嵌入到Word中。
 
 最近，这里有个需求是需要转换一大批的MathML文件到Word文档中，如果使用[Open-XML-SDK](https://github.com/OfficeDev/Open-XML-SDK)是非常容易实现的，你可以参考[https://github.com/scalad/MathML2Word](https://github.com/scalad/MathML2Word)，但是，最重要的是这不是想要的结果，因为经过Open-XML-SDK的转换，这个公式的类型变成了[OMML(Office Math Markup Language)](https://en.wikipedia.org/wiki/Mathematical_markup_language)格式的，什么是OMML呢？
@@ -16,6 +18,10 @@ EquationInput(公式输入)、EquationOutput(公式输出)和MTSDK(MathType连�
 
 目前采用的方式是使用EquationInputFileText类从磁盘文件中读入MathML数据类型的数据，然后使用EquationOutputClipboardText输出到系统的剪切板中，从剪切板中获取到该公式的对象并写入到Word文档中，当文件读取并转换完成后，生成Wrod文档并保存。
 
-* [关于MathType6.9破解](http://download.csdn.net/detail/qq_20545159/9921565)
+### 环境 ###
+* MathType 6.9 [关于MathType6.9破解](http://download.csdn.net/detail/qq_20545159/9921565)
+* Office(Word And Excel) 最好使用2007+
+* .Net FrameWord4.0
 
+### 运行图 ###
 ![](https://github.com/scalad/MathML2MathTypeEquation/blob/master/doc/effect.gif)

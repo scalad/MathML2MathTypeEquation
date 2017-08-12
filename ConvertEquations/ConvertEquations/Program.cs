@@ -35,7 +35,14 @@ namespace ConvertEquations
             string filename = System.Configuration.ConfigurationManager.AppSettings["filename"];
             program.MathML2MathTypeWord(program, new ConvertEquation(),savepath, filename);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="ce"></param>
+        /// <param name="savepath">the file where to save</param>
+        /// <param name="filename">the input file name</param>
+        /// <returns></returns>
         public string MathML2MathTypeWord(Program p, ConvertEquation ce, string savepath, string filename)
         {
             Utils.killAllProcess("winword.exe");
@@ -127,8 +134,8 @@ namespace ConvertEquations
                                     {
                                         object SaveWithDocument = true;
                                         anchor = newdoc.Application.Selection.Range;
-                                        webClient.DownloadFile(matchString, @"c:\\images\\test.png");
-                                        newdoc.Application.ActiveDocument.InlineShapes.AddPicture(@"c:\\images\\test.png", true, true, ref anchor);
+                                        webClient.DownloadFile(matchString, savepath + "test.png");
+                                        newdoc.Application.ActiveDocument.InlineShapes.AddPicture(savepath + "test.png", true, true, ref anchor);
                                         newapp.Selection.Move();
                                         Console.WriteLine("插入图片完成");
                                     }
