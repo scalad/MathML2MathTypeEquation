@@ -9,16 +9,16 @@ using System.Text.RegularExpressions;
 namespace ConvertEquations
 {
     /// <summary>
-    /// 全局静态变量
+    /// Global and static variables
     /// </summary>
     class Common
     {
-        //过滤HTML中img标签中的src
+        //Filter the src in the html img tag
         public static string HTML_IMG = @"<img\b[^<>]*?\bsrc[\s\t\r\n]*=[\s\t\r\n]*[""']?[\s\t\r\n]*(?<imgUrl>[^\s\t\r\n""'<>]*)[^<>]*?/?[\s\t\r\n]*>";
     }
 
     /// <summary>
-    /// 系统状态码
+    /// System Code
     /// </summary>
     sealed class ResultCode
     {
@@ -30,13 +30,40 @@ namespace ConvertEquations
         public static string FILE_PATH_ERROR = "文件位置错误";
     }
 
-
     /// <summary>
-    /// 系统工具
+    /// System Utils
     /// </summary>
     class Utils
     {
-        // 杀掉processName进程
+        /// <summary>
+        /// delete download file
+        /// </summary>
+        /// <param name="names">file full path collections</param>
+        public static void deleteFile(List<string> names)
+        {
+            if (names == null || names.Count <= 0)
+            {
+                return;
+            }
+            else
+            {
+                foreach (string name in names)
+                {
+                    if (File.Exists(name))
+                    {
+                        FileInfo info = new FileInfo(name);
+                        if (info.Attributes.ToString().IndexOf("ReadOnly") != -1)
+                            info.Attributes = FileAttributes.Normal;
+                        File.Delete(name);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// kill a process
+        /// </summary>
+        /// <param name="processName"></param>
         public static void killAllProcess(string processName)
         {
             System.Diagnostics.Process[] myPs;
@@ -61,10 +88,10 @@ namespace ConvertEquations
             }
         }
 
-        //过滤掉HTML中标签
+        //filter html tag
         public static string NoHTML(string Htmlstring)
         {
-            //删除脚本
+            //delete the script
             Htmlstring = Regex.Replace(Htmlstring, @"<script[^>]*?>.*?</script>", "",RegexOptions.IgnoreCase);
             Htmlstring = Regex.Replace(Htmlstring, @"<(.[^>]*)>", "", RegexOptions.IgnoreCase);
             Htmlstring = Regex.Replace(Htmlstring, @"([\r\n])[\s]+", "", RegexOptions.IgnoreCase);

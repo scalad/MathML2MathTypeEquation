@@ -33,8 +33,12 @@ namespace ConvertEquations
             Program program = new Program();
             string savepath = System.Configuration.ConfigurationManager.AppSettings["savepath"];
             string filename = System.Configuration.ConfigurationManager.AppSettings["filename"];
-            program.MathML2MathTypeWord(program, new ConvertEquation(),savepath, filename);
+            program.MathML2MathTypeWord(program, new ConvertEquation(), savepath, filename);
         }
+
+
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -69,16 +73,13 @@ namespace ConvertEquations
             }
             excel.Visible = false; 
             excel.UserControl = true;
-
             // 以只读的形式打开EXCEL文件  
-            workbook = excel.Application.Workbooks.Open(path, nothing, true, nothing, nothing, nothing,
-             nothing, nothing, nothing, true, nothing, nothing, nothing, nothing, nothing);
+            workbook = excel.Application.Workbooks.Open(path, nothing, true, nothing, nothing, nothing,nothing, nothing, nothing, true, nothing, nothing, nothing, nothing, nothing);
             //取得第一个工作薄
             worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
             //取得总记录行数   (包括标题列)
             int iRowCount = worksheet.UsedRange.Rows.Count;
             int iColCount = worksheet.UsedRange.Columns.Count;
-
             //生成列头
             List<string> titles = new List<String>();
             for (int i = 0; i < iColCount; i++)
@@ -94,6 +95,7 @@ namespace ConvertEquations
             int count = 0;
             object anchor = null;
             Console.ReadLine();
+            List<string> imgs = new List<string>();
             for (int iRow = rowIdx; iRow <= iRowCount; iRow++)
             {
                 for (int iCol = 1; iCol <= iColCount; iCol++)
@@ -129,13 +131,18 @@ namespace ConvertEquations
                                 foreach(string tag in tags)
                                 {
                                     Console.WriteLine(tag);
+                                    //regular expression extract img src resource
                                     string matchString = Regex.Match("<img " + tag, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value;
                                     if (matchString != null && !"".Equals(matchString))
                                     {
                                         object SaveWithDocument = true;
                                         anchor = newdoc.Application.Selection.Range;
-                                        webClient.DownloadFile(matchString, savepath + "test.png");
-                                        newdoc.Application.ActiveDocument.InlineShapes.AddPicture(savepath + "test.png", true, true, ref anchor);
+                                        //regular expression extract file name
+                                        string imgfilename = Regex.Match(matchString, ".+/(.+)$", RegexOptions.IgnoreCase).Groups[1].Value;
+                                        string imgpath = savepath + imgfilename;
+                                        imgs.Add(imgpath);
+                                        webClient.DownloadFile(matchString, imgpath);
+                                        newdoc.Application.ActiveDocument.InlineShapes.AddPicture(imgpath, true, true, ref anchor);
                                         newapp.Selection.Move();
                                         Console.WriteLine("插入图片完成");
                                     }
@@ -187,10 +194,14 @@ namespace ConvertEquations
                 }
                 Console.WriteLine(ex);
             }
-            excel.Quit();
-            excel = null;
-            newdoc = null;
-            newapp = null;
+            finally
+            {
+                excel.Quit();
+                excel = null;
+                newdoc = null;
+                newapp = null;
+                Utils.deleteFile(imgs);
+            }
             Console.WriteLine("Transaction finish");
             Console.ReadLine();
             return ResultCode.SUCCESS;
