@@ -18,4 +18,4 @@ EquationInput(公式输入)、EquationOutput(公式输出)和MTSDK(MathType连�
 
 * [关于MathType6.9破解](http://download.csdn.net/detail/qq_20545159/9921565)
 
-![](https://github.com/scalad/MathML2MathTypeEquation/blob/master/doc/effect.webm)
+![](https://github.com/scalad/MathML2MathTypeEquation/blob/master/doc/effect.gif)
