@@ -17,4 +17,5 @@ EquationInput(公式输入)、EquationOutput(公式输出)和MTSDK(MathType连�
 目前采用的方式是使用EquationInputFileText类从磁盘文件中读入MathML数据类型的数据，然后使用EquationOutputClipboardText输出到系统的剪切板中，从剪切板中获取到该公式的对象并写入到Word文档中，当文件读取并转换完成后，生成Wrod文档并保存。
 
 * [关于MathType6.9破解](http://download.csdn.net/detail/qq_20545159/9921565)
-* 
+
+![](https://github.com/scalad/MathML2MathTypeEquation/blob/master/doc/effect.webm)
