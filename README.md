@@ -1,6 +1,16 @@
 ## MathML2MathTypeEquation ##
 
-### 介绍 ###
+
+### Support ###
+* MathML公式类使用MathType公式进行转换
+* HTML格式导出Word(支持表格、图片、排序标签、转义字符等)
+
+### Required ###
+* Office2003+(Word And Excel) Best of 2007
+* .Net Frameword4.0+
+* MathType6.9+[关于MathType6.9破解](http://download.csdn.net/detail/qq_20545159/9921565)
+
+### Introduce ###
 
 这篇文章主要介绍怎么使用[MathType](https://www.dessci.com/en/reference/sdk/)把[MathML](https://zh.wikipedia.org/wiki/%E6%95%B0%E5%AD%A6%E7%BD%AE%E6%A0%87%E8%AF%AD%E8%A8%80)转换MathType类型的公式对象并嵌入到Word中。
 
@@ -18,10 +28,5 @@ EquationInput(公式输入)、EquationOutput(公式输出)和MTSDK(MathType连�
 
 目前采用的方式是使用EquationInputFileText类从磁盘文件中读入MathML数据类型的数据，然后使用EquationOutputClipboardText输出到系统的剪切板中，从剪切板中获取到该公式的对象并写入到Word文档中，当文件读取并转换完成后，生成Wrod文档并保存。
 
-### 环境 ###
-* MathType 6.9 [关于MathType6.9破解](http://download.csdn.net/detail/qq_20545159/9921565)
-* Office(Word And Excel) 最好使用2007+
-* .Net FrameWord4.0
-
-### 运行图 ###
+### Operation ###
 ![](https://github.com/scalad/MathML2MathTypeEquation/blob/master/doc/effect.gif)
