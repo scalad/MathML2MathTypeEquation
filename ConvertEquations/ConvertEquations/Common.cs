@@ -6,9 +6,31 @@ using System.IO;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using Word = Microsoft.Office.Interop.Word;
 
 namespace ConvertEquations
 {
+    /// <summary>
+    /// Word操作工具类
+    /// </summary>
+    class WordUtils
+    {
+        public static object nothing = System.Reflection.Missing.Value;
+
+        /// <summary>
+        /// 向左移动moveCount个光标
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="moveCount"></param>
+        public static void moveLeft(Word.Document document, int moveCount)
+        {
+            if (moveCount <= 0) return;
+            object moveUnit = Microsoft.Office.Interop.Word.WdUnits.wdWord;
+            object moveExtend = Microsoft.Office.Interop.Word.WdMovementType.wdExtend;
+            document.Application.Selection.MoveLeft(ref moveUnit, moveCount, ref nothing);
+        }
+    }
+
     /// <summary>
     /// Global and static variables
     /// </summary>
