@@ -11,6 +11,27 @@ using Word = Microsoft.Office.Interop.Word;
 namespace ConvertEquations
 {
     /// <summary>
+    /// MathML处理
+    /// </summary>
+    class MathML
+    {
+        static string[] riginal = {"∆"};
+
+        static string[] replace = { "&#x0394;"};
+        //预处理mathml
+        public static string preproccessMathml(string mathml)
+        {
+            int rilength = riginal.Length;
+            int relength = replace.Length;
+            for (int i = 0; i < rilength; i++)
+            {
+                mathml.Replace(riginal[i], replace[i]);
+            }
+            return mathml;
+        }
+    }
+
+    /// <summary>
     /// Word操作工具类
     /// </summary>
     class WordUtils
