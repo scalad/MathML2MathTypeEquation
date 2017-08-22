@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
 using Word = Microsoft.Office.Interop.Word;
+using System.Collections;
 
 namespace ConvertEquations
 {
@@ -15,19 +16,37 @@ namespace ConvertEquations
     /// </summary>
     class MathML
     {
-        static string[] riginal = {"∆"};
+   
+        public static Hashtable equations = new Hashtable();
 
-        static string[] replace = { "&#x0394;"};
+        /// <summary>
+        /// MathType不可识别的字符映射关系
+        /// </summary>
+        static MathML()
+        {
+            equations.Add("∆", "&#x0394;");
+            equations.Add("<mo><</mo>", "<mo>&#x003C;</mo>");
+            equations.Add("<mo>></mo>", "<mo>&#x003E;</mo>");
+            equations.Add("<mo>⪈</mo>", "<mo>&#x2269;</mo>");
+            equations.Add("<mo>⪇</mo>", "<mo>&#x2268;</mo>");
+            equations.Add("<mo>≢</mo>", "<mo>&#x2260;</mo>");
+            equations.Add("<mo>⊝</mo>", "<mo>&#x2296;</mo>");
+            equations.Add("<mo>·</mo>", "<mo>&#x22C5;</mo>");
+            //equations.Add("<mo>⋅</mo>",  "<mo>&#x22C5;</mo>");
+            equations.Add("<mo>&nbsp;</mo>", "");
+            equations.Add("<mtext>&#x00A1;&#x00CE;</mtext>", "<mo>&#x2225;</mo>");//||
+        }
+
         //预处理mathml
         public static string preproccessMathml(string mathml)
         {
-            int rilength = riginal.Length;
-            int relength = replace.Length;
-            for (int i = 0; i < rilength; i++)
+            string replaceHtml = mathml;
+            foreach (DictionaryEntry de in equations)
             {
-                mathml.Replace(riginal[i], replace[i]);
+                string tmp = replaceHtml.Replace(de.Key.ToString(), de.Value.ToString());
+                replaceHtml = tmp;
             }
-            return mathml;
+            return replaceHtml;
         }
     }
 

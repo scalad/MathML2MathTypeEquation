@@ -389,9 +389,6 @@ namespace ConvertEquations
         {
             bool bReturn = false;
 
-            Console.WriteLine("Converting {0} to {1}", m_ei.ToString(), m_eo.ToString());
-
-            Console.WriteLine("Get equation: {0}", m_ei.strFileName);
             if (m_ei.Get())
             {
                 Console.WriteLine("Get MTEF");

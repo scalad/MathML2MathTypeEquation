@@ -33,14 +33,13 @@ namespace ConvertEquations
             Program program = new Program();
             string savepath = System.Configuration.ConfigurationManager.AppSettings["savepath"];
             string filename = System.Configuration.ConfigurationManager.AppSettings["filename"];
-            program.MathML2MathTypeWord(program, new ConvertEquation(), savepath, filename);
+            var result = program.MathML2MathTypeWord(program, new ConvertEquation(), savepath, filename);
+            Console.Write(result);
+            Console.ReadLine();
         }
 
-
-
-
         /// <summary>
-        /// 
+        /// convert mathml to mathtype equation type into word
         /// </summary>
         /// <param name="p"></param>
         /// <param name="ce"></param>
@@ -52,6 +51,7 @@ namespace ConvertEquations
             Utils.killAllProcess("winword.exe");
             Utils.killAllProcess("mathtype.exe");
             Utils.killAllProcess("excel.exe");
+
             object name = savepath + filename.Substring(0, filename.LastIndexOf(".")) + ".doc";
 
             //create document
@@ -94,8 +94,9 @@ namespace ConvertEquations
             int rowIdx = 2;
             int count = 0;
             object anchor = null;
-            Console.ReadLine();
             List<string> imgs = new List<string>();
+            Console.WriteLine("是否开始转换?");
+            Console.ReadLine();
             for (int iRow = rowIdx; iRow <= iRowCount; iRow++)
             {
                 for (int iCol = 1; iCol <= iColCount; iCol++)
@@ -107,18 +108,19 @@ namespace ConvertEquations
                     range = (Excel.Range)worksheet.Cells[iRow, iCol];
                     string d = range.Text.ToString();
                     string[] oneLevelData = d.Split(new string[] { "<math", "</math>" }, StringSplitOptions.None);
-
                     try
                     {
+                        newapp.Selection.Font.Color = Word.WdColor.wdColorBlack;
                         foreach (string datas in oneLevelData)
                         {
                             if (datas.StartsWith(" xmlns="))
                             {
-                                // MML in a text file to clipboard text
-                                ce.Convert(new EquationInputFileText("<math" + datas + "</math>", ClipboardFormats.cfMML), new EquationOutputClipboardText());
+                                string mathml = "<math" + datas + "</math>";
+                                mathml = MathML.preproccessMathml(mathml);
+                                ce.Convert(new EquationInputFileText(mathml, ClipboardFormats.cfMML), new EquationOutputClipboardText());
                                 count++;
+                                WordUtils.moveLeft(newdoc, 1);
                                 newapp.Selection.Paste();
-                                Console.WriteLine("插入公式完成");
                                 if (count == 9)
                                 {
                                     Utils.killAllProcess("mathtype.exe");
@@ -127,30 +129,35 @@ namespace ConvertEquations
                             }
                             else
                             {
+                                //var html = HTMLUtils.HtmlClipboardData(datas);
+                                //HTMLUtils.CopyHTMLToClipboard(html);
+                                //object dataType = Word.WdPasteDataType.wdPasteHTML;
+                                //newapp.Selection.PasteSpecial(ref nothing, ref nothing, ref nothing, ref nothing, ref dataType, ref nothing, ref nothing);
+
                                 string[] tags = datas.Split(new string[] { "<img", "<IMG" }, StringSplitOptions.None);
-                                foreach(string tag in tags)
+                                foreach (string tag in tags)
                                 {
                                     Console.WriteLine(tag);
                                     //regular expression extract img src resource
                                     string matchString = Regex.Match("<img " + tag, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value;
                                     if (matchString != null && !"".Equals(matchString))
                                     {
-                                        object SaveWithDocument = true;
                                         anchor = newdoc.Application.Selection.Range;
                                         //regular expression extract file name
                                         string imgfilename = Regex.Match(matchString, ".+/(.+)$", RegexOptions.IgnoreCase).Groups[1].Value;
                                         string imgpath = savepath + imgfilename;
                                         imgs.Add(imgpath);
+                                        //download the image from the url
                                         webClient.DownloadFile(matchString, imgpath);
+                                        //add the picture into word
                                         newdoc.Application.ActiveDocument.InlineShapes.AddPicture(imgpath, true, true, ref anchor);
                                         newapp.Selection.Move();
                                         Console.WriteLine("插入图片完成");
                                     }
-                                    newapp.Selection.Font.Color = Word.WdColor.wdColorBlack;
                                     var newtag = tag;
-                                    if (tag != null && ( tag.StartsWith(" img_type") || tag.Contains("src")))
+                                    if (tag != null && (tag.StartsWith(" img_type") || tag.Contains("src")))
                                     {
-                                         newtag = "<img " + tag;
+                                        newtag = "<img " + tag;
                                     }
                                     string text = Utils.NoHTML(newtag);
                                     if (text != null && !"".Equals(text))
@@ -197,14 +204,14 @@ namespace ConvertEquations
             finally
             {
                 excel.Quit();
+                newapp.Quit();
                 excel = null;
                 newdoc = null;
                 newapp = null;
                 Utils.deleteFile(imgs);
             }
-            Console.WriteLine("Transaction finish");
-            Console.ReadLine();
             return ResultCode.SUCCESS;
         }
+
     }
 }
