@@ -28,5 +28,36 @@ EquationInput(公式输入)、EquationOutput(公式输出)和MTSDK(MathType连�
 
 目前采用的方式是使用EquationInputFileText类从磁盘文件中读入MathML数据类型的数据，然后使用EquationOutputClipboardText输出到系统的剪切板中，从剪切板中获取到该公式的对象并写入到Word文档中，当文件读取并转换完成后，生成Wrod文档并保存。
 
+### Question ###
+1、特殊公式映射转换
+
+```C#
+static MathML()
+{
+    equations.Add("∆", "&#x0394;");
+    equations.Add("<mo><</mo>", "<mo>&#x003C;</mo>");
+    equations.Add("<mo>></mo>", "<mo>&#x003E;</mo>");
+    equations.Add("<mo>⪈</mo>", "<mo>&#x2269;</mo>");
+    equations.Add("<mo>⪇</mo>", "<mo>&#x2268;</mo>");
+    equations.Add("<mo>≢</mo>", "<mo>&#x2260;</mo>");
+    equations.Add("<mo>⊝</mo>", "<mo>&#x2296;</mo>");
+    equations.Add("<mo>·</mo>", "<mo>&#x22C5;</mo>");
+    equations.Add("<mo>⋅</mo>",  "<mo>&#x22C5;</mo>");
+    equations.Add("<mo>&nbsp;</mo>", "");
+    equations.Add("<mtext>&#x00A1;&#x00CE;</mtext>", "<mo>&#x2225;</mo>");//||
+}
+```
+由于原来的数据是经过[MathJax](https://github.com/mathjax/MathJax)转换而来，因此，该平台上有的图标或者是公式在MathType上是无法转换，也就是说MathType无法识别这些图标，所以我们需要把这些不能识别的公式进行映射替换，替换为MathType可以识别的Unicode编码.
+
+2、关于MathType弹出缺少字体的对话框
+因为在上面的字符映射上可能使用了不同字体的Unicode编码，很有可能导致这个问题：
+MathType需要一个新版的MT Extra（TrueType）字体，请重新安装MathType（用CD或下载安装）以便获取正确的字体
+
+这时，一些符号就无法使用。下面介绍解决以上问题的办法。
+
+1，进入文件夹X:\Windows\Fonts（X为系统盘盘符，一般是C），如果有MT Extra(TrueType)字体或者快捷方式，则将其删除。
+
+2，进入MathType安装目录的\Fonts\TrueType\文件夹，将里面的mtextra.ttf字体复制至文件夹X:\Windows\Fonts（粘贴时可能会有安装字体的提示）。
+
 ### Operation ###
 ![](https://github.com/scalad/MathML2MathTypeEquation/blob/master/doc/effect.gif)
