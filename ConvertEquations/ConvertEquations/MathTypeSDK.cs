@@ -391,13 +391,10 @@ namespace ConvertEquations
 
             if (m_ei.Get())
             {
-                Console.WriteLine("Get MTEF");
                 if (m_ei.GetMTEF())
                 {
-                    Console.WriteLine("Convert Equation");
                     if (ConvertToOutput())
                     {
-                        Console.WriteLine("Write equation: {0}", m_eo.strFileName);
                         if (m_eo.Put())
                             bReturn = true;
                     }

@@ -30,12 +30,42 @@ namespace ConvertEquations
         [STAThread]
         static void Main(string[] args)
         {
-            Program program = new Program();
-            string savepath = System.Configuration.ConfigurationManager.AppSettings["savepath"];
-            string filename = System.Configuration.ConfigurationManager.AppSettings["filename"];
-            var result = program.MathML2MathTypeWord(program, new ConvertEquation(), savepath, filename);
-            Console.Write(result);
-            Console.ReadLine();
+            Console.WriteLine("请先选择excel文件，是否继续？enter");
+            int read = Console.Read();
+            if (read != 0)
+            {
+                Console.WriteLine(read);
+                Program program = new Program();
+                OpenFileDialog fileDialog = new OpenFileDialog();
+                fileDialog.Multiselect = true;
+                fileDialog.Title = "请选择文件";
+                fileDialog.Filter = "所有文件(*.xlsx)|*.*";
+                string file = "";
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    file = fileDialog.FileName;
+                    Console.WriteLine("已选择文件:" + file);
+                }
+                if (file.EndsWith(".xlsx") || file.EndsWith(".xls"))
+                {
+                    string savepath = System.Configuration.ConfigurationManager.AppSettings["savepath"];
+                    Console.WriteLine("正在读取Excel...");
+                    var result = program.MathML2MathTypeWord(program, new ConvertEquation(), savepath, file);
+                    Console.Write(result);
+                }
+                else
+                {
+                    MessageBox.Show("请选择正确的excel文件");
+                    Application.Exit();
+                    return;
+                }
+                
+            }
+            else
+            {
+                Application.Exit();
+                return;
+            }
         }
 
         /// <summary>
@@ -46,13 +76,13 @@ namespace ConvertEquations
         /// <param name="savepath">the file where to save</param>
         /// <param name="filename">the input file name</param>
         /// <returns></returns>
-        public string MathML2MathTypeWord(Program p, ConvertEquation ce, string savepath, string filename)
+        public string MathML2MathTypeWord(Program p, ConvertEquation ce, string savepath, string file)
         {
             Utils.killAllProcess("winword.exe");
             Utils.killAllProcess("mathtype.exe");
             Utils.killAllProcess("excel.exe");
 
-            object name = savepath + filename.Substring(0, filename.LastIndexOf(".")) + ".doc";
+            object name = file.Substring(0, file.LastIndexOf(".")) + ".doc";
 
             //create document
             Word.Application newapp = new Word.Application();
@@ -63,10 +93,8 @@ namespace ConvertEquations
 
             Excel.Workbook workbook = null;
             Excel.Worksheet worksheet = null;
-            
-            string path = Utils.GetInputFolder(filename);
            
-            Excel.Application excel = new Excel.Application();//lauch excel application  
+            Excel.Application excel = new Excel.Application();//lauch excel application   
             if (excel == null)
             {
                 return ResultCode.EXCEL_READ_ERROR;
@@ -74,7 +102,7 @@ namespace ConvertEquations
             excel.Visible = false; 
             excel.UserControl = true;
             // 以只读的形式打开EXCEL文件  
-            workbook = excel.Application.Workbooks.Open(path, nothing, true, nothing, nothing, nothing,nothing, nothing, nothing, true, nothing, nothing, nothing, nothing, nothing);
+            workbook = excel.Application.Workbooks.Open(file, nothing, true, nothing, nothing, nothing,nothing, nothing, nothing, true, nothing, nothing, nothing, nothing, nothing);
             //取得第一个工作薄
             worksheet = (Excel.Worksheet)workbook.Worksheets.get_Item(1);
             //取得总记录行数   (包括标题列)
@@ -88,6 +116,7 @@ namespace ConvertEquations
                 titles.Add(txt.ToString()+ ": ");
 
             }
+            Console.WriteLine("Excel读取完成...");
             //生成行数据
             Excel.Range range;
             //从第二行开始
@@ -95,8 +124,6 @@ namespace ConvertEquations
             int count = 0;
             object anchor = null;
             List<string> imgs = new List<string>();
-            Console.WriteLine("是否开始转换?");
-            Console.ReadLine();
             for (int iRow = rowIdx; iRow <= iRowCount; iRow++)
             {
                 for (int iCol = 1; iCol <= iColCount; iCol++)
@@ -117,6 +144,7 @@ namespace ConvertEquations
                             {
                                 string mathml = "<math" + datas + "</math>";
                                 mathml = MathML.preproccessMathml(mathml);
+                                Console.WriteLine("转换公式: " + mathml);
                                 ce.Convert(new EquationInputFileText(mathml, ClipboardFormats.cfMML), new EquationOutputClipboardText());
                                 count++;
                                 WordUtils.moveLeft(newdoc, 1);
@@ -137,7 +165,6 @@ namespace ConvertEquations
                                 string[] tags = datas.Split(new string[] { "<img", "<IMG" }, StringSplitOptions.None);
                                 foreach (string tag in tags)
                                 {
-                                    Console.WriteLine(tag);
                                     //regular expression extract img src resource
                                     string matchString = Regex.Match("<img " + tag, "<img.+?src=[\"'](.+?)[\"'].*?>", RegexOptions.IgnoreCase).Groups[1].Value;
                                     if (matchString != null && !"".Equals(matchString))
@@ -152,7 +179,7 @@ namespace ConvertEquations
                                         //add the picture into word
                                         newdoc.Application.ActiveDocument.InlineShapes.AddPicture(imgpath, true, true, ref anchor);
                                         newapp.Selection.Move();
-                                        Console.WriteLine("插入图片完成");
+                                        Console.WriteLine("插入图片: " + imgpath);
                                     }
                                     var newtag = tag;
                                     if (tag != null && (tag.StartsWith(" img_type") || tag.Contains("src")))
@@ -165,7 +192,7 @@ namespace ConvertEquations
                                         //去除空格、插入文本b
                                         newapp.Selection.TypeText(text.Trim());
                                         newapp.Selection.Move();
-                                        Console.WriteLine("插入文本完成 >>> " + text);
+                                        Console.WriteLine("插入文本: " + text);
                                     }
                                 }
                             }
