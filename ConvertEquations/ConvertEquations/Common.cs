@@ -32,7 +32,7 @@ namespace ConvertEquations
             equations.Add("<mo>≢</mo>", "<mo>&#x2260;</mo>");
             equations.Add("<mo>⊝</mo>", "<mo>&#x2296;</mo>");
             equations.Add("<mo>·</mo>", "<mo>&#x22C5;</mo>");
-            //equations.Add("<mo>⋅</mo>",  "<mo>&#x22C5;</mo>");
+            equations.Add("<mo>⋅</mo>",  "<mo>&#x22C5;</mo>");
             equations.Add("<mo>&nbsp;</mo>", "");
             equations.Add("<mtext>&#x00A1;&#x00CE;</mtext>", "<mo>&#x2225;</mo>");//||
         }
