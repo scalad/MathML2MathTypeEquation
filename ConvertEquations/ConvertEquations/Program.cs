@@ -30,15 +30,14 @@ namespace ConvertEquations
         [STAThread]
         static void Main(string[] args)
         {
-            Console.WriteLine("请先选择excel文件，是否继续？enter");
+            Console.Write("请先选择excel文件，是否继续？enter");
             int read = Console.Read();
             if (read != 0)
             {
-                Console.WriteLine(read);
                 Program program = new Program();
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 fileDialog.Multiselect = true;
-                fileDialog.Title = "请选择文件";
+                fileDialog.Title = "请选择需要转换的Excel文件";
                 fileDialog.Filter = "所有文件(*.xlsx)|*.*";
                 string file = "";
                 if (fileDialog.ShowDialog() == DialogResult.OK)
@@ -50,8 +49,7 @@ namespace ConvertEquations
                 {
                     string savepath = System.Configuration.ConfigurationManager.AppSettings["savepath"];
                     Console.WriteLine("正在读取Excel...");
-                    var result = program.MathML2MathTypeWord(program, new ConvertEquation(), savepath, file);
-                    Console.Write(result);
+                    program.MathML2MathTypeWord(program, new ConvertEquation(), savepath, file);
                 }
                 else
                 {
