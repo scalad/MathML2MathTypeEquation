@@ -1,6 +1,5 @@
 ## MathML2MathTypeEquation ##
 
-
 ### Support ###
 * MathML公式类使用MathType公式进行转换
 * HTML格式导出Word(支持表格、图片、排序标签、转义字符等)
@@ -8,7 +7,7 @@
 ### Required ###
 * Office2003+(Word And Excel) Best of 2007
 * .Net Frameword4.0+
-* MathType6.9+[关于MathType6.9破解](http://download.csdn.net/detail/qq_20545159/9921565)
+* MathType6.9+[关于MathType6.9破解](http://pan.baidu.com/s/1nuDCh4H)
 
 ### Operation ###
 ![](https://github.com/scalad/MathML2MathTypeEquation/blob/master/doc/effect.gif)
